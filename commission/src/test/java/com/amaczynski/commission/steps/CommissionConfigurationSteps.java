@@ -41,7 +41,7 @@ public class CommissionConfigurationSteps {
         List<CommissionTier> tiers = rows.stream()
                 .map(row -> new CommissionTier(
                         new BigDecimal(row.get("tierFrom")),
-                        row.get("tierTo").isBlank() ? null : new BigDecimal(row.get("tierTo")),
+                        row.get("tierTo") == null || row.get("tierTo").isBlank() ? null : new BigDecimal(row.get("tierTo")),
                         new BigDecimal(row.get("rate")).divide(BigDecimal.valueOf(100))
                 ))
                 .collect(Collectors.toList());
