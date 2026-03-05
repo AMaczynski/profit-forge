@@ -1,0 +1,26 @@
+.node {
+  background: #fff;
+  border: 2px solid #6366f1;
+  border-radius: 10px;
+  padding: 10px 20px;
+  min-width: 130px;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.15s, border-color 0.15s;
+}
+
+.node:hover {
+  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.3);
+}
+
+.selected {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
+}
+
+.name {
+  font-weight: 600;
+  font-size: 14px;
+  color: #1e1b4b;
+}
