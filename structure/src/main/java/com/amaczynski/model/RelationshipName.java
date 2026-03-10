@@ -1,4 +1,4 @@
-package com.amaczynski;
+package com.amaczynski.model;
 
 
 public record RelationshipName(String value) {

@@ -1,4 +1,4 @@
-package com.amaczynski;
+package com.amaczynski.model;
 
 
 public record Role(String name) {

@@ -11,6 +11,11 @@ organizations, or any actor) and the **relationships** between them. It is based
 The model intentionally makes no assumptions about specific business roles or relationship
 types — those are passed as plain strings, keeping this layer domain-agnostic.
 
+This model was inspired by and created on top of ideas from the
+[Software-Archetypes/archetypes](https://github.com/Software-Archetypes/archetypes)
+project, which provides a strong conceptual foundation for modeling roles, relationships,
+and organizational structures.
+w
 ## Data Model
 
 ### Core classes

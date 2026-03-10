@@ -1,4 +1,4 @@
-package com.amaczynski;
+package com.amaczynski.model;
 
 
 public record PartyRole(PartyId partyId, Role role) {
@@ -12,11 +12,11 @@ public record PartyRole(PartyId partyId, Role role) {
         }
     }
 
-    static PartyRole of(PartyId partyId, String value) {
+    public static PartyRole of(PartyId partyId, String value) {
         return of(partyId, Role.of(value));
     }
 
-    static PartyRole of(PartyId partyId, Role role) {
+    public static PartyRole of(PartyId partyId, Role role) {
         return new PartyRole(partyId, role);
     }
 
