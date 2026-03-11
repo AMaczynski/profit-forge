@@ -9,7 +9,7 @@ public record PartyRelationship(PartyRelationshipId id, PartyRole from, PartyRol
         return new PartyRelationship(id, from, to, name);
     }
 
-    PartyRelationshipAdded toPartyRelationshipAddedEvent() {
+    public PartyRelationshipAdded toPartyRelationshipAddedEvent() {
         return new PartyRelationshipAdded(id.asString(), from.partyId().asString(),
                 from.role().asString(), to.partyId().asString(), to.role().asString(), name.asString());
     }

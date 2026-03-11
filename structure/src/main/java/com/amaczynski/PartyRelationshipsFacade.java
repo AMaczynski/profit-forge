@@ -28,8 +28,6 @@ public class PartyRelationshipsFacade {
 
     public Result<PartyRelationshipDefinitionFailed, PartyRelationship> assign(PartyId fromId, Role fromRole, PartyId toId, Role toRole, RelationshipName name) {
 
-        //queries might come from external module, or from the same one. They can contain all info (including all relations),
-        // but if graph is huge is better to search it online
         Result<PartyRelationshipDefinitionFailed, PartyRole> fromParty = definePartyRoleFor(fromId, fromRole);
         Result<PartyRelationshipDefinitionFailed, PartyRole> toParty = definePartyRoleFor(toId, toRole);
 
