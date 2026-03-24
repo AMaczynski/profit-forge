@@ -1,0 +1,16 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-add-employee-columns
+      author: amaczynski
+      changes:
+        - addColumn:
+            tableName: parties
+            columns:
+              - column:
+                  name: name
+                  type: varchar(255)
+                  remarks: Name of the employee (SeniorManager, RegionalManager, InsuranceAdvisor).
+              - column:
+                  name: email
+                  type: varchar(255)
+                  remarks: Email of the employee.

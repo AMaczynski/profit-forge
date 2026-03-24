@@ -1,0 +1,19 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-create-parties-table
+      author: amaczynski
+      changes:
+        - createTable:
+            tableName: parties
+            columns:
+              - column:
+                  name: party_id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: party_type
+                  type: varchar(50)
+                  constraints:
+                    nullable: false

@@ -1,1 +1,3 @@
 rootProject.name = 'structure'
+
+include('party-core', 'party-jpa', 'party-sample')

@@ -22,3 +22,30 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
+
+# IDE — IntelliJ IDEA
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# IDE — Eclipse
+.classpath
+.project
+.settings/
+
+# IDE — VS Code
+.vscode/
+
+# Gradle build output & caches
+build/
+.gradle/
+out/
+
+# Node / npm (graph-visualizer)
+node_modules/
+dist/
+
+# OS
+.DS_Store
+Thumbs.db

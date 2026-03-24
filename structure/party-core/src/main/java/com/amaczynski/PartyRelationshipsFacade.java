@@ -9,7 +9,7 @@ import com.amaczynski.repository.PartyRelationshipRepository;
 import com.amaczynski.repository.PartyRepository;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.data.util.Pair;
+import com.amaczynski.common.Pair;
 
 import java.util.function.BiFunction;
 
@@ -32,7 +32,7 @@ public class PartyRelationshipsFacade {
         Result<PartyRelationshipDefinitionFailed, PartyRole> toParty = definePartyRoleFor(toId, toRole);
 
         return fromParty.combine(toParty, ANY_FAILURE, Pair::of)
-                .flatMap(rolesPair -> partyRelationshipFactory.defineFor(rolesPair.getFirst(), rolesPair.getSecond(), name))
+                .flatMap(rolesPair -> partyRelationshipFactory.defineFor(rolesPair.first(), rolesPair.second(), name))
                 //we should handle unique key (from, fromRole, to, toRole, relName) constraint violations here
                 .peekSuccess(repository::save)
                 .peekSuccess(relation -> eventPublisher.publish(relation.toPartyRelationshipAddedEvent()));
