@@ -6,5 +6,7 @@ public interface EventPublisher {
 
     void publish(PublishedEvent event);
 
-    void publish(List<PublishedEvent> events);
+    default void publish(List<PublishedEvent> events) {
+        events.forEach(this::publish);
+    }
 }

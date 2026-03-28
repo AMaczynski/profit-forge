@@ -14,7 +14,7 @@ public class PartyRelationshipFactory {
 
     private final Supplier<PartyRelationshipId> partyRelationshipIdSupplier;
 
-    PartyRelationshipFactory(Supplier<PartyRelationshipId> partyRelationshipIdSupplier) {
+    public PartyRelationshipFactory(Supplier<PartyRelationshipId> partyRelationshipIdSupplier) {
         this.partyRelationshipIdSupplier = partyRelationshipIdSupplier != null ? partyRelationshipIdSupplier : PartyRelationshipId::random;
     }
 

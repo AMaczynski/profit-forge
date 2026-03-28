@@ -67,6 +67,83 @@ PartyRelationship rel = PartyRelationship.from(
 );
 ```
 
+## Module structure — Ports & Adapters
+
+This project is structured as a **Ports & Adapters** (Hexagonal) architecture so that
+the core domain can be dropped into any project regardless of the underlying technology
+(database, ORM, messaging system, HTTP framework, etc.).
+
+```
+structure/
+├── party-core        ← the portable library (no infrastructure dependencies)
+├── party-jpa         ← JPA/Liquibase adapter (one possible persistence implementation)
+└── party-sample      ← example: insurance company hierarchy built on top of the library
+```
+
+### party-core
+
+The only module consumers **must** depend on. Contains:
+
+- **Domain model** — `Party`, `PartyRole`, `PartyRelationship` and all value objects
+- **Ports** — `PartyRepository` and `PartyRelationshipRepository` are plain Java interfaces;
+  the core has no opinion on how they are implemented
+- **Domain services** — `PartyRelationshipsFacade`, factories, domain events
+- **Utilities** — `Result<F,S>` (railway-oriented error handling), `Pair<A,B>`
+
+Dependencies: **Lombok only**.
+
+### party-jpa
+
+An optional adapter that implements the ports using Spring Data JPA. Provides:
+
+- JPA entities (`PartyEntity`, `PartyRelationshipEntity`) with `SINGLE_TABLE` inheritance
+- Spring Data repository interfaces (`JpaPartyRepository`, `JpaPartyRelationshipRepository`)
+- Adapter implementations (`PartyRepositoryImpl`, `PartyRelationshipRepositoryImpl`)
+- `PartyEntityConverter` — a plug-in interface for mapping concrete `Party` subtypes to
+  their JPA entities (new subtypes register their own converter; no changes to the adapter)
+- Liquibase changesets for the base `parties` and `party_relationships` tables
+  (`db/changelog/db.changelog-party-jpa.yaml` — include this from your project's master
+  changelog)
+
+Dependencies: `party-core`, `spring-data-jpa`, `jakarta.persistence-api`, `liquibase-core`.
+
+### party-sample
+
+Shows how a real project uses the library. Contains the insurance company hierarchy
+(`Employee → SeniorManager / RegionalManager / InsuranceAdvisor`), their JPA entities,
+converters, and a Liquibase master changelog that extends the base tables with
+employee-specific columns (`name`, `email`).
+
+This module is **not part of the library** — it lives here as a reference implementation
+and sandbox.
+
+Dependencies: `party-core`, `party-jpa`, `spring-data-jpa`, `jakarta.persistence-api`.
+
+### Adding a new adapter
+
+Create a new Gradle module (e.g. `party-kafka`, `party-rest`) that depends on
+`party-core` only, then implement or consume the relevant port interfaces.
+Adapter modules must not depend on each other.
+
+```
+party-core          ← always
+    ├── party-jpa   ← optional persistence adapter
+    ├── party-rest  ← optional HTTP adapter (future)
+    └── party-kafka ← optional messaging adapter (future)
+```
+
+### Adding a new Party subtype
+
+1. **Domain** (`party-core` or your own project): extend `Party` (or an intermediate
+   abstract class like `Employee`).
+2. **JPA** (`party-jpa` or your own project): extend `PartyEntity`, add
+   `@DiscriminatorValue`, implement `toDomain()`.
+3. **Converter**: implement `PartyEntityConverter` and register it with
+   `PartyRepositoryImpl`.
+4. **Liquibase**: add a changeset for any new columns your subtype requires.
+
+No existing code in `party-core` or `party-jpa` needs to change.
+
 ## Design notes
 
 - All value objects (`PartyId`, `Role`, `PartyRole`, `RelationshipName`,
