@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -37,6 +38,14 @@ public class PartyController {
         var party = new InsuranceAdvisor(PartyId.random(), request.name(), request.email());
         partyRepository.save(party);
         return created(party);
+    }
+
+    @GetMapping
+    public List<EmployeeResponse> getAllParties() {
+        return partyRepository.findMatching(p -> true).stream()
+                .filter(p -> p instanceof Employee)
+                .map(p -> EmployeeResponse.from((Employee) p))
+                .toList();
     }
 
     @GetMapping("/{id}")

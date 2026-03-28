@@ -1,79 +1,54 @@
 import { useState } from 'react';
-import type { NodeData } from '../types';
+import type { PartyType } from '../types';
 import styles from './Forms.module.css';
 
+const PARTY_TYPES: PartyType[] = ['SeniorManager', 'RegionalManager', 'InsuranceAdvisor'];
+
 interface Props {
-  onAdd: (data: NodeData) => void;
+  onAdd: (partyType: PartyType, name: string, email: string) => void;
 }
 
 export default function AddNodeForm({ onAdd }: Props) {
+  const [partyType, setPartyType] = useState<PartyType>('InsuranceAdvisor');
   const [name, setName] = useState('');
-  const [attrs, setAttrs] = useState<{ key: string; value: string }[]>([{ key: '', value: '' }]);
-
-  function handleAttrChange(index: number, field: 'key' | 'value', val: string) {
-    setAttrs(prev => prev.map((a, i) => i === index ? { ...a, [field]: val } : a));
-  }
-
-  function addAttrRow() {
-    setAttrs(prev => [...prev, { key: '', value: '' }]);
-  }
-
-  function removeAttrRow(index: number) {
-    setAttrs(prev => prev.filter((_, i) => i !== index));
-  }
+  const [email, setEmail] = useState('');
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!name.trim()) return;
-
-    const attributes: Record<string, string> = {};
-    for (const { key, value } of attrs) {
-      if (key.trim()) attributes[key.trim()] = value;
-    }
-
-    onAdd({ name: name.trim(), attributes });
+    if (!name.trim() || !email.trim()) return;
+    onAdd(partyType, name.trim(), email.trim());
     setName('');
-    setAttrs([{ key: '', value: '' }]);
+    setEmail('');
   }
 
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
-      <h3 className={styles.formTitle}>Add Node</h3>
+      <h3 className={styles.formTitle}>Add Party</h3>
+      <select
+        className={styles.input}
+        value={partyType}
+        onChange={e => setPartyType(e.target.value as PartyType)}
+      >
+        {PARTY_TYPES.map(t => (
+          <option key={t} value={t}>{t}</option>
+        ))}
+      </select>
       <input
         className={styles.input}
-        placeholder="Node name"
+        placeholder="Name"
         value={name}
         onChange={e => setName(e.target.value)}
         required
       />
-      <div className={styles.attrList}>
-        {attrs.map((attr, i) => (
-          <div key={i} className={styles.attrRow}>
-            <input
-              className={styles.inputSm}
-              placeholder="key"
-              value={attr.key}
-              onChange={e => handleAttrChange(i, 'key', e.target.value)}
-            />
-            <input
-              className={styles.inputSm}
-              placeholder="value"
-              value={attr.value}
-              onChange={e => handleAttrChange(i, 'value', e.target.value)}
-            />
-            <button
-              type="button"
-              className={styles.removeBtn}
-              onClick={() => removeAttrRow(i)}
-              disabled={attrs.length === 1}
-            >✕</button>
-          </div>
-        ))}
-        <button type="button" className={styles.addAttrBtn} onClick={addAttrRow}>
-          + attribute
-        </button>
-      </div>
-      <button className={styles.submitBtn} type="submit">Add Node</button>
+      <input
+        className={styles.input}
+        placeholder="Email"
+        type="email"
+        value={email}
+        onChange={e => setEmail(e.target.value)}
+        required
+      />
+      <button className={styles.submitBtn} type="submit">Add Party</button>
     </form>
   );
 }

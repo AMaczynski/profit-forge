@@ -47,8 +47,13 @@ public class PartyRelationshipController {
     }
 
     @GetMapping
-    public List<PartyRelationshipResponse> getFromParty(@RequestParam UUID fromPartyId) {
-        return repository.findAllRelationsFrom(PartyId.of(fromPartyId)).stream()
+    public List<PartyRelationshipResponse> getRelationships(@RequestParam(required = false) UUID fromPartyId) {
+        if (fromPartyId != null) {
+            return repository.findAllRelationsFrom(PartyId.of(fromPartyId)).stream()
+                    .map(PartyRelationshipResponse::from)
+                    .toList();
+        }
+        return repository.findMatching(r -> true).stream()
                 .map(PartyRelationshipResponse::from)
                 .toList();
     }
